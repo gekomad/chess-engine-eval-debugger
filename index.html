@@ -154,7 +154,7 @@
                   $.ajax({
                       type: 'POST',
                       url: 'json.server.py',
-                      data: '{"fen":"'+fen_complete+'","exe":"'+$("#exe1").val()+'","eval_command":"'+$("#eval_command1").val()+'","protocol":"'+$("#protocol1").val()+'","remove_line":"'+$("#remove_line1").val()+'"}',    
+                      data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe1").val())+'","eval_command":"'+$("#eval_command1").val()+'","protocol":"'+$("#protocol1").val()+'","remove_line":"'+$("#remove_line1").val()+'"}',    
                       contentType: "application/json",
                       dataType: 'json',
                       success: function(msg) {
@@ -170,7 +170,7 @@
                   $.ajax({
                       type: 'POST',
                       url: 'json.server.py',
-                      data: '{"fen":"'+fen_complete+'","exe":"'+$("#exe2").val()+'","eval_command":"'+$("#eval_command2").val()+'","protocol":"'+$("#protocol2").val()+'","remove_line":"'+$("#remove_line2").val()+'"}',    
+                      data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe2").val())+'","eval_command":"'+$("#eval_command2").val()+'","protocol":"'+$("#protocol2").val()+'","remove_line":"'+$("#remove_line2").val()+'"}',    
                       contentType: "application/json",
                       dataType: 'json',
                       success: function(msg) {

@@ -7,7 +7,8 @@ import tempfile
 import os
 import subprocess
 from subprocess import Popen
-
+import urllib
+import os  
 
 class Server(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -51,7 +52,7 @@ class Server(BaseHTTPRequestHandler):
         message = json.loads(self.rfile.read(length))
 
         fen = message['fen']
-        exe = message['exe']
+        exe = urllib.unquote(message['exe'])
         remove_line = int(message['remove_line'])
         eval_command = message['eval_command']
         protocol = message['protocol']
