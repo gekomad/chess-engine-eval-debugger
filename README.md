@@ -12,6 +12,9 @@ v0.1-alpha
 ## Open web page  
   
 [http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html)
+or
+[http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score&rem1=0&rem2=4](http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score&rem1=0&rem2=4)
+
 
 ## Debbugging engine
 
