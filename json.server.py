@@ -53,28 +53,27 @@ class Server(BaseHTTPRequestHandler):
 
         fen = message['fen']
         exe = urllib.unquote(message['exe'])
-        remove_line = int(message['remove_line'])
         eval_command = message['eval_command']
         protocol = message['protocol']
         set_board = 'position fen'
-
+        disable_ponder = 'setoption name ponder value false'
         if protocol == 'xboard':
             set_board = 'setboard'
-
+            disable_ponder = 'ponder off'
         # write command file
         new_file, filename = tempfile.mkstemp()
-        print(filename)
 
-        os.write(new_file, set_board + ' ' + fen + "\n" + eval_command + "\n")
+        os.write(new_file, disable_ponder + '\n' + set_board + ' ' + fen + "\n" + eval_command + "\nquit\n")
         os.close(new_file)
 
         input = open(filename, 'r').read()
-
+    
         outfile = Popen([exe], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
         out, err = outfile.communicate(input=input)
         res = out.decode()
-        res = '\n'.join(res.split('\n')[remove_line:])
         os.remove(filename)
+       
         # send the message back
         self._set_headers()
         #new_file1, filename1 = tempfile.mkstemp()

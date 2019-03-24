@@ -1,13 +1,13 @@
 
 chess-engine-eval-debugger
 ======
-<img src="http://cinnamonchess.altervista.org/web_evaluate2.gif">
+<img src="http://cinnamonchess.altervista.org/web_evaluate3.gif">
 
 #### Version
 v0.1-alpha
 
 ## Run local server
-`./json.server.py`  
+`python json.server.py`
   
 ## Open web page  
   
