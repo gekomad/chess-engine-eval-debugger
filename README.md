@@ -1,10 +1,11 @@
 
+
 chess-engine-eval-debugger
 ======
 <img src="http://cinnamonchess.altervista.org/web_evaluate3.gif">
 
 #### Version
-v0.1-alpha
+v.0.1
 
 ## Run local server
 `python json.server.py`
@@ -12,8 +13,10 @@ v0.1-alpha
 ## Open web page  
   
 [http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html)
+
 or
-[http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score&rem1=0&rem2=4](http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score&rem1=0&rem2=4)
+
+[http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score](http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score)
 
 
 ## Debbugging engine
@@ -25,19 +28,27 @@ or
 
 ### Use your engine
 the two commands will be send to **UCI** engine
+
 `position fen <fen>`  
+
 `<eval command>`  
 
 example for stockfish:
+
 `position fen rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR w KQkq - 0 1`
+
 `eval`
 
 the two commands will be send to **XBOARD** engine
+
 `position fen <fen>`  
+
 `<eval command>`  
 
 example for crafty:
+
 `setboard rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR w KQkq - 0 1`
+
 `score`
 
 so your engine have to manage the command `<eval command>` 
