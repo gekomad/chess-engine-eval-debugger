@@ -76,10 +76,10 @@
          </div>
       </div>
       <div class="row" >
-<p >
+    <p>
  <div class="row" >
          <div class="column" style="background-color:#aaa;">
-            <p><input type="text"  style="background-color:#aaa; border: none;" readonly size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
+            <p><input type="text"  style=" border: none;"  size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
             <textarea id="writeArea1" rows="25"  style="background-color:#6984a3;" cols="100%" readonly>eng1 evaluation</textarea>
          </div>
          <div class="column" style="background-color:#aaa;">
@@ -99,7 +99,6 @@
             $( "#castle_Q" ).click(function() {  onDrop();});
             $( "#castle_k" ).click(function() {  onDrop();});
             $( "#castle_q" ).click(function() {  onDrop();});
-
             function init() {
                $('#exe1').val($.urlParam('exe1'))
                   $('#exe2').val($.urlParam('exe2'))
@@ -191,7 +190,23 @@
                     sparePieces: true
                   };
                   var board = ChessBoard('board', cfg);
-                  
+                 $('#text_fen').on('input', function() {
+                    fen = $('#text_fen').val()
+
+                    board.position(fen);
+                    document.getElementById("castle_K").checked = false;
+                    document.getElementById("castle_k").checked = false;
+                    document.getElementById("castle_Q").checked = false;
+                    document.getElementById("castle_q").checked = false;
+                    if(fen.includes(' b '))document.getElementById("black_to_move").checked = true;
+                    castling=fen.split(' ')[2]
+                    if(castling.includes('k'))document.getElementById("castle_k").checked = true;
+                    if(castling.includes('K'))document.getElementById("castle_K").checked = true;
+                    if(castling.includes('q'))document.getElementById("castle_q").checked = true;
+                    if(castling.includes('Q'))document.getElementById("castle_Q").checked = true;
+
+                    onDrop();
+                 });
              
                   $('#startBtn').on('click', function() {
                     document.getElementById("castle_K").checked = true;

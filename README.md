@@ -2,7 +2,7 @@
 
 chess-engine-eval-debugger
 ======
-<img src="http://cinnamonchess.altervista.org/web_evaluate3.gif">
+<img src="http://cinnamonchess.altervista.org/web_evaluate4.gif">
 
 #### Version
 v.0.1
