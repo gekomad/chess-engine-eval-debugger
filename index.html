@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- http://127.0.0.1:8080/index.html?exe1=stockfish&exe2=crafty&proto1=uci&proto2=xboard&eval1=eval&eval2=score&rem1=0&rem2=4 -->
 <html>
    <head>
       <meta charset="utf-8">
@@ -51,8 +50,8 @@
             <h2>Engines</h2>
             <label for="engine1">Engine 1</label>
             <div class="row">
-               <label for="exe1">exe:</label><input title="example: c:\stockfish.exe"  type="text" id="exe1">
-               <label for="eval_command1">eval command:</label><input type="text" title="example: eval" id="eval_command1" value="eval">
+               <label for="exe1">exe:</label><input placeholder="c:\path\engine1.exe"  type="text" id="exe1">
+               <label for="eval_command1">eval command:</label><input type="text" placeholder="eval" id="eval_command1" value="eval">
                <label for="protocol1">protocol1:</label>
                <select id="protocol1">
                   <option value="uci">uci</option>
@@ -64,8 +63,8 @@
             <label for="engine2">Engine 2</label>
             <div class="row">
 
-               <label for="exe2">exe:</label><input "example: c:\crafty.exe" type="text" id="exe2"">
-               <label for="eval_command2">eval command:</label><input type="text" title="example: score" id="eval_command2" value="score">
+               <label for="exe2">exe:</label><input placeholder="c:\path\engine2.exe"  type="text" id="exe2">
+               <label for="eval_command2">eval command:</label><input type="text" placeholder="score" id="eval_command2" value="score">
                <label for="protocol2">protocol:</label>
                <select id="protocol2">
                   <option value="uci">uci</option>
@@ -79,7 +78,7 @@
     <p>
  <div class="row" >
          <div class="column" style="background-color:#aaa;">
-            <p><input type="text"  style=" border: none;"  size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
+            <p><input type="text"  style=" border: none;" title="paste fen" size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
             <textarea id="writeArea1" rows="25"  style="background-color:#6984a3;" cols="100%" readonly>eng1 evaluation</textarea>
          </div>
          <div class="column" style="background-color:#aaa;">
