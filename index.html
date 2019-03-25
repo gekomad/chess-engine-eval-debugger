@@ -10,12 +10,12 @@
       <link rel="stylesheet" href="css/site2.css" />
       <link rel="stylesheet" href="css/chessboard.css" />
       <style>
-        #writeArea1 {
-            font-family: monospace;
-        }
-        #writeArea2 {
-            font-family: monospace;
-        }
+         #writeArea1 {
+         font-family: monospace;
+         }
+         #writeArea2 {
+         font-family: monospace;
+         }
          * {
          box-sizing: border-box;
          }
@@ -57,12 +57,10 @@
                   <option value="uci">uci</option>
                   <option value="xboard">xboard</option>
                </select>
-                  <p>               
+               <p>               
             </div>
-          
             <label for="engine2">Engine 2</label>
             <div class="row">
-
                <label for="exe2">exe:</label><input placeholder="c:\path\engine2.exe"  type="text" id="exe2">
                <label for="eval_command2">eval command:</label><input type="text" placeholder="score" id="eval_command2" value="score">
                <label for="protocol2">protocol:</label>
@@ -70,163 +68,169 @@
                   <option value="uci">uci</option>
                   <option value="xboard">xboard</option>
                </select>
-              
             </div>
          </div>
       </div>
       <div class="row" >
-    <p>
- <div class="row" >
-         <div class="column" style="background-color:#aaa;">
-            <p><input type="text"  style=" border: none;" title="paste fen" size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
-            <textarea id="writeArea1" rows="25"  style="background-color:#6984a3;" cols="100%" readonly>eng1 evaluation</textarea>
-         </div>
-         <div class="column" style="background-color:#aaa;">
-            <p>_</p>
-            <textarea id="writeArea2" rows="25" style="background-color:#88aac2;" cols="100%" readonly>eng2 evaluation</textarea>
+         <p>
+         <div class="row" >
+            <div class="column" style="background-color:#aaa;">
+               <p><input type="text"  style=" border: none;" title="paste fen" size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
+               <textarea id="writeArea1" rows="25"  style="background-color:#6984a3;" cols="100%" readonly>eng1 evaluation</textarea>
+            </div>
+            <div class="column" style="background-color:#aaa;">
+               <p>_</p>
+               <textarea id="writeArea2" rows="25" style="background-color:#88aac2;" cols="100%" readonly>eng2 evaluation</textarea>
+            </div>
          </div>
       </div>
       </div>
-   </div>
       <script src="js/json3.min.js"></script>
       <script src="js/jquery-1.10.1.min.js"></script>
       <script src="js/prettify.js"></script>
       <script src="js/chessboard.js"></script>
       <script>
-            $( "#black_to_move" ).click(function() {  onDrop();});
-            $( "#castle_K" ).click(function() {  onDrop();});
-            $( "#castle_Q" ).click(function() {  onDrop();});
-            $( "#castle_k" ).click(function() {  onDrop();});
-            $( "#castle_q" ).click(function() {  onDrop();});
-            function init() {
-               $('#exe1').val($.urlParam('exe1'))
-                  $('#exe2').val($.urlParam('exe2'))
-                  if($.urlParam('proto1')!=null)$('#protocol1').val($.urlParam('proto1'))
-                  if($.urlParam('proto2')!=null)$('#protocol2').val($.urlParam('proto2'))
-                  $('#eval_command1').val($.urlParam('eval1'))
-                  $('#eval_command2').val($.urlParam('eval2'))                  
-            }
-
-         $.urlParam = function(name){
-             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-             if (results==null) {
-                return null;
-             }
-             return decodeURI(results[1]) || 0;
+         $( "#black_to_move" ).click(function() {  onDrop();});
+         $( "#castle_K" ).click(function() {  onDrop();});
+         $( "#castle_Q" ).click(function() {  onDrop();});
+         $( "#castle_k" ).click(function() {  onDrop();});
+         $( "#castle_q" ).click(function() {  onDrop();});
+         function init() {
+            $('#exe1').val($.urlParam('exe1'))
+               $('#exe2').val($.urlParam('exe2'))
+               if($.urlParam('proto1')!=null)$('#protocol1').val($.urlParam('proto1'))
+               if($.urlParam('proto2')!=null)$('#protocol2').val($.urlParam('proto2'))
+               $('#eval_command1').val($.urlParam('eval1'))
+               $('#eval_command2').val($.urlParam('eval2'))                  
          }
-                
-               var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
-                 
-                  var side_to_move='w'
-                  var castle=''
-                  if($("#black_to_move").prop('checked')){
-                   side_to_move='b'
-                  }
-                  if($("#castle_K").prop('checked')){
-                   castle=castle+'K'
-                  }
-                  if($("#castle_Q").prop('checked')){
-                   castle=castle+'Q'
-                  }
-                  if($("#castle_k").prop('checked')){
-                   castle=castle+'k'
-                  }
-                  if($("#castle_q").prop('checked')){
-                   castle=castle+'q'
-                  }
-                  if(castle==''){
-                   castle='-'
-                  }
-
-
-                  if(newPos==null){
-                      fen_complete= board.fen() +" "+side_to_move+" "+castle +" - 0 1"
-                 }else{
-                     fen_complete= ChessBoard.objToFen(newPos) +" "+side_to_move+" "+castle +" - 0 1"
-                 }
-
-                  $('#text_fen').val(fen_complete);
-                    if($("#exe1").val()!=""){
-                  $.ajax({
-                      type: 'POST',
-                      url: 'json.server.py',
-                      data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe1").val())+'","eval_command":"'+$("#eval_command1").val()+'","protocol":"'+$("#protocol1").val()+'"}',    
-                      contentType: "application/json",
-                      dataType: 'json',
-                      success: function(msg) {
-                              $('#writeArea1').val(msg.responseText);
-                              return data;
-                          },
-                  
-                      error: function(msg) {
-                              $('#writeArea1').val(msg.responseText);
-                          }
-                  }); }else {$('#writeArea1').val("first engine not selected");}
-                  if($("#exe2").val()!=""){
-                  $.ajax({
-                      type: 'POST',
-                      url: 'json.server.py',
-                      data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe2").val())+'","eval_command":"'+$("#eval_command2").val()+'","protocol":"'+$("#protocol2").val()+'"}',    
-                      contentType: "application/json",
-                      dataType: 'json',
-                      success: function(msg) {
-                              $('#writeArea2').val(msg.responseText);
-                              return data;
-                          },
-                  
-                      error: function(msg) {
-                              $('#writeArea2').val(msg.responseText);
-                          }
-                  });
-                  }else {$('#writeArea2').val("second engine not selected");}
-                  };
-                  
-                  var cfg = {
-                    draggable: true,
-                    position: 'start',
-                    dropOffBoard: 'trash',
-                    onDrop: onDrop,
-                    sparePieces: true
-                  };
-                  var board = ChessBoard('board', cfg);
-                 $('#text_fen').on('input', function() {
-                    fen = $('#text_fen').val()
-
-                    board.position(fen);
-                    document.getElementById("castle_K").checked = false;
-                    document.getElementById("castle_k").checked = false;
-                    document.getElementById("castle_Q").checked = false;
-                    document.getElementById("castle_q").checked = false;
-                    if(fen.includes(' b '))document.getElementById("black_to_move").checked = true;
-                    castling=fen.split(' ')[2]
-                    if(castling.includes('k'))document.getElementById("castle_k").checked = true;
-                    if(castling.includes('K'))document.getElementById("castle_K").checked = true;
-                    if(castling.includes('q'))document.getElementById("castle_q").checked = true;
-                    if(castling.includes('Q'))document.getElementById("castle_Q").checked = true;
-
-                    onDrop();
-                 });
+         
+         $.urlParam = function(name){
+          var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+          if (results==null) {
+             return null;
+          }
+          return decodeURI(results[1]) || 0;
+         }
              
-                  $('#startBtn').on('click', function() {
-                    document.getElementById("castle_K").checked = true;
-                    document.getElementById("castle_k").checked = true;
-                    document.getElementById("castle_Q").checked = true;
-                    document.getElementById("castle_q").checked = true;
-                    document.getElementById("black_to_move").checked = false;         
-                    board.start()
-                    onDrop();
-                    }
-                );
-                  $('#clearBtn').on('click', function() {
-                    document.getElementById("castle_K").checked = false;
-                    document.getElementById("castle_k").checked = false;
-                    document.getElementById("castle_Q").checked = false;
-                    document.getElementById("castle_q").checked = false;
-                    board.clear()
-                    }
-                );
-                  
+            var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
+              
+               var side_to_move='w'
+               var castle=''
+               if($("#black_to_move").prop('checked')){
+                side_to_move='b'
+               }
+               if($("#castle_K").prop('checked')){
+                castle=castle+'K'
+               }
+               if($("#castle_Q").prop('checked')){
+                castle=castle+'Q'
+               }
+               if($("#castle_k").prop('checked')){
+                castle=castle+'k'
+               }
+               if($("#castle_q").prop('checked')){
+                castle=castle+'q'
+               }
+               if(castle==''){
+                castle='-'
+               }
+         
+         
+               if(newPos==null){
+                   fen_complete= board.fen() +" "+side_to_move+" "+castle +" - 0 1"
+              }else{
+                  fen_complete= ChessBoard.objToFen(newPos) +" "+side_to_move+" "+castle +" - 0 1"
+              }
+         
+               $('#text_fen').val(fen_complete);
+               if($("#exe1").val()!="" && $("#eval_command1").val()!=""){
+                   $.ajax({
+                       type: 'POST',
+                       url: 'json.server.py',
+                       data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe1").val())+'","eval_command":"'+$("#eval_command1").val()+'","protocol":"'+$("#protocol1").val()+'"}',    
+                       contentType: "application/json",
+                       dataType: 'json',
+                       success: function(msg) {
+                               $('#writeArea1').val(msg.responseText);
+                               return data;
+                           },
+                   
+                       error: function(msg) {
+                               $('#writeArea1').val(msg.responseText);
+                           }
+                   }); 
+                }else {
+                     if($("#exe1").val()=="")$('#writeArea1').val("first engine not selected");else
+                     $('#writeArea1').val("first eval command not selected");
+               }
+               if($("#exe2").val()!="" && $("#eval_command2").val()!=""){
+               $.ajax({
+                   type: 'POST',
+                   url: 'json.server.py',
+                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe2").val())+'","eval_command":"'+$("#eval_command2").val()+'","protocol":"'+$("#protocol2").val()+'"}',    
+                   contentType: "application/json",
+                   dataType: 'json',
+                   success: function(msg) {
+                           $('#writeArea2').val(msg.responseText);
+                           return data;
+                       },
                
+                   error: function(msg) {
+                           $('#writeArea2').val(msg.responseText);
+                       }
+               });
+               }else {
+                     if($("#exe2").val()=="")$('#writeArea2').val("second engine not selected");else
+                     $('#writeArea2').val("second eval command not selected");
+               }
+               };
+               
+               var cfg = {
+                 draggable: true,
+                 position: 'start',
+                 dropOffBoard: 'trash',
+                 onDrop: onDrop,
+                 sparePieces: true
+               };
+               var board = ChessBoard('board', cfg);
+              $('#text_fen').on('input', function() {
+                 fen = $('#text_fen').val()
+         
+                 board.position(fen);
+                 document.getElementById("castle_K").checked = false;
+                 document.getElementById("castle_k").checked = false;
+                 document.getElementById("castle_Q").checked = false;
+                 document.getElementById("castle_q").checked = false;
+                 if(fen.includes(' b '))document.getElementById("black_to_move").checked = true;
+                 castling=fen.split(' ')[2]
+                 if(castling.includes('k'))document.getElementById("castle_k").checked = true;
+                 if(castling.includes('K'))document.getElementById("castle_K").checked = true;
+                 if(castling.includes('q'))document.getElementById("castle_q").checked = true;
+                 if(castling.includes('Q'))document.getElementById("castle_Q").checked = true;
+         
+                 onDrop();
+              });
+          
+               $('#startBtn').on('click', function() {
+                 document.getElementById("castle_K").checked = true;
+                 document.getElementById("castle_k").checked = true;
+                 document.getElementById("castle_Q").checked = true;
+                 document.getElementById("castle_q").checked = true;
+                 document.getElementById("black_to_move").checked = false;         
+                 board.start()
+                 onDrop();
+                 }
+             );
+               $('#clearBtn').on('click', function() {
+                 document.getElementById("castle_K").checked = false;
+                 document.getElementById("castle_k").checked = false;
+                 document.getElementById("castle_Q").checked = false;
+                 document.getElementById("castle_q").checked = false;
+                 board.clear()
+                 }
+             );
+               
+            
       </script>   
    </body>
 </html>
