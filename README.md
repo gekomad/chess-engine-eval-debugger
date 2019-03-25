@@ -26,11 +26,11 @@ or
 ### Debbugging engine
 
 1. Set one or two engine (exe)
-2. Set eval command, for example for stockfish is **eval**, for crafty is **score**
+2. Set eval command, for example for stockfish 8 is **eval**, for crafty is **score**
 3. Select protocol (uci or xboard)
 4. Set pieces on chessboard and automatically the evaluate value will appear below
 
-### How it work
+### How it works
 
 These commands will be send to **UCI** engine
 ```
@@ -66,8 +66,8 @@ quit
 
 Engines (uci or xboard) have to manage the command `<eval command>` to print eval information
 
-### Requirement
-Python
+### Requirements
+Python (2 or 3)
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use [Github Issues](https://github.com/gekomad/chess-engine-eval-debugger/issues).
