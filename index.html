@@ -16,6 +16,12 @@
          #writeArea2 {
          font-family: monospace;
          }
+        #writeArea3 {
+         font-family: monospace;
+         }
+        #writeArea4{
+         font-family: monospace;
+         }
          * {
          box-sizing: border-box;
          }
@@ -52,12 +58,11 @@
             <div class="row">
                <label for="exe1">exe:</label><input placeholder="c:\path\engine1.exe"  type="text" id="exe1">
                <label for="eval_command1">eval command:</label><input type="text" placeholder="eval" id="eval_command1" value="eval">
-               <label for="protocol1">protocol1:</label>
+               <label for="protocol1">protocol:</label>
                <select id="protocol1">
                   <option value="uci">uci</option>
                   <option value="xboard">xboard</option>
-               </select>
-               <p>               
+               </select>           
             </div>
             <label for="engine2">Engine 2</label>
             <div class="row">
@@ -69,6 +74,26 @@
                   <option value="xboard">xboard</option>
                </select>
             </div>
+            <label for="engine3">Engine 3</label>
+            <div class="row">
+               <label for="exe3">exe:</label><input placeholder="c:\path\engine3.exe"  type="text" id="exe3">
+               <label for="eval_command3">eval command:</label><input type="text" placeholder="score" id="eval_command3" value="score">
+               <label for="protocol3">protocol:</label>
+               <select id="protocol3">
+                  <option value="uci">uci</option>
+                  <option value="xboard">xboard</option>
+               </select>
+            </div>
+            <label for="engine4">Engine 4</label>
+            <div class="row">
+               <label for="exe4">exe:</label><input placeholder="c:\path\engine4.exe"  type="text" id="exe4">
+               <label for="eval_command4">eval command:</label><input type="text" placeholder="score" id="eval_command4" value="score">
+               <label for="protocol4">protocol:</label>
+               <select id="protocol4">
+                  <option value="uci">uci</option>
+                  <option value="xboard">xboard</option>
+               </select>
+            </div>
          </div>
       </div>
       <div class="row" >
@@ -76,11 +101,19 @@
          <div class="row" >
             <div class="column" style="background-color:#aaa;">
                <p><input type="text"  style=" border: none;" title="paste fen" size="100%" id="text_fen"  value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
-               <textarea id="writeArea1" rows="25"  style="background-color:#6984a3;" cols="100%" readonly>eng1 evaluation</textarea>
+               <textarea id="writeArea1" rows="15"  style="background-color:#88aac2;" cols="100%" readonly>eng1 evaluation</textarea>
             </div>
             <div class="column" style="background-color:#aaa;">
                <p>_</p>
-               <textarea id="writeArea2" rows="25" style="background-color:#88aac2;" cols="100%" readonly>eng2 evaluation</textarea>
+               <textarea id="writeArea2" rows="15" style="background-color:#88aac2;" cols="100%" readonly>eng2 evaluation</textarea>
+            </div>
+            <div class="column" style="background-color:#aaa;">
+               <p>_</p>
+               <textarea id="writeArea3" rows="15" style="background-color:#88aac2;" cols="100%" readonly>eng3 evaluation</textarea>
+            </div>
+            <div class="column" style="background-color:#aaa;">
+               <p>_</p>
+               <textarea id="writeArea4" rows="15" style="background-color:#88aac2;" cols="100%" readonly>eng4 evaluation</textarea>
             </div>
          </div>
       </div>
@@ -98,10 +131,16 @@
          function init() {
             $('#exe1').val($.urlParam('exe1'))
                $('#exe2').val($.urlParam('exe2'))
+               $('#exe3').val($.urlParam('exe3'))
+               $('#exe4').val($.urlParam('exe4'))
                if($.urlParam('proto1')!=null)$('#protocol1').val($.urlParam('proto1'))
                if($.urlParam('proto2')!=null)$('#protocol2').val($.urlParam('proto2'))
+               if($.urlParam('proto3')!=null)$('#protocol3').val($.urlParam('proto3'))
+               if($.urlParam('proto4')!=null)$('#protocol4').val($.urlParam('proto4'))
                $('#eval_command1').val($.urlParam('eval1'))
-               $('#eval_command2').val($.urlParam('eval2'))                  
+               $('#eval_command2').val($.urlParam('eval2'))
+               $('#eval_command3').val($.urlParam('eval3'))             
+               $('#eval_command4').val($.urlParam('eval4'))
          }
          
          $.urlParam = function(name){
@@ -152,11 +191,13 @@
                        dataType: 'json',
                        success: function(msg) {
                                $('#writeArea1').val(msg.responseText);
+                               $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);   
                                return data;
                            },
                    
                        error: function(msg) {
                                $('#writeArea1').val(msg.responseText);
+                               $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);   
                            }
                    }); 
                 }else {
@@ -172,18 +213,66 @@
                    dataType: 'json',
                    success: function(msg) {
                            $('#writeArea2').val(msg.responseText);
+                           $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);   
                            return data;
                        },
                
                    error: function(msg) {
                            $('#writeArea2').val(msg.responseText);
+                           $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);   
                        }
                });
                }else {
                      if($("#exe2").val()=="")$('#writeArea2').val("second engine not selected");else
                      $('#writeArea2').val("second eval command not selected");
                }
+               
+               if($("#exe3").val()!="" && $("#eval_command3").val()!=""){
+               $.ajax({
+                   type: 'POST',
+                   url: 'json.server.py',
+                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe3").val())+'","eval_command":"'+$("#eval_command3").val()+'","protocol":"'+$("#protocol3").val()+'"}',    
+                   contentType: "application/json",
+                   dataType: 'json',
+                   success: function(msg) {
+                           $('#writeArea3').val(msg.responseText);
+                           $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);   
+                           return data;
+                       },
+               
+                   error: function(msg) {
+                           $('#writeArea3').val(msg.responseText);
+                           $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);   
+                       }
+               });
+               }else {
+                     if($("#exe3").val()=="")$('#writeArea3').val("second engine not selected");else
+                     $('#writeArea3').val("second eval command not selected");
+               }
+               if($("#exe4").val()!="" && $("#eval_command4").val()!=""){
+               $.ajax({
+                   type: 'POST',
+                   url: 'json.server.py',
+                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe4").val())+'","eval_command":"'+$("#eval_command4").val()+'","protocol":"'+$("#protocol4").val()+'"}',    
+                   contentType: "application/json",
+                   dataType: 'json',
+                   success: function(msg) {
+                           $('#writeArea4').val(msg.responseText);     
+                           $('#writeArea1').scrollTop($('#writeArea4')[0].scrollHeight);                        
+                           return data;
+                       },
+               
+                   error: function(msg) {
+                           $('#writeArea4').val(msg.responseText);
+                           $('#writeArea4').scrollTop($('#writeArea4')[0].scrollHeight);   
+                       }
+               });
+               }else {
+                     if($("#exe4").val()=="")$('#writeArea4').val("second engine not selected");else
+                     $('#writeArea4').val("second eval command not selected");
+               }
                };
+               
                
                var cfg = {
                  draggable: true,

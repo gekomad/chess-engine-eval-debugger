@@ -4,15 +4,15 @@ chess-engine-eval-debugger
 <img src="http://cinnamonchess.altervista.org/web_evaluate4.gif">
 
 #### Version
-v.0.2
+v.0.3
 
 ## Run local server
 
-`python server_python2.py`
+`server_python2.py`
 
 or
 
-`python server_python3.py`
+`server_python3.py`
 
 ## Open web page
 
@@ -20,15 +20,15 @@ or
 
 or
 
-[http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&exe2=c:\path\engine2.exe&proto1=uci&proto2=xboard&eval1=eval&eval2=score](http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&exe2=c:\path\engine2.exe&proto1=uci&proto2=xboard&eval1=eval&eval2=score)
+[http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=c:\path\engine2.exe&proto2=uci&eval2=score&exe3=c:\path\engine3.exe&proto3=xboard&eval3=eval&exe4=c:\path\engine4.exe&proto4=uci&eval4=score](http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=c:\path\engine2.exe&proto2=uci&eval2=score&exe3=c:\path\engine3.exe&proto3=xboard&eval3=eval&exe4=c:\path\engine4.exe&proto4=uci&eval4=score)
 
 
 ### Debbugging engine
 
-1. Set one or two engine (exe)
-2. Set eval command, for example for stockfish 8 is **eval**, for crafty is **score**
+1. Set one or more engines
+2. Set eval command, example stockfish 8 uses **eval**, crafty uses **score**
 3. Select protocol (uci or xboard)
-4. Set pieces on chessboard and automatically the evaluate value will appear below
+4. Set pieces on chessboard and automatically the evaluate value will appear below.
 
 ### How it works
 
