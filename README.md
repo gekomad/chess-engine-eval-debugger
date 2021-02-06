@@ -1,7 +1,7 @@
 
 chess-engine-eval-debugger
 ======
-<img src="http://cinnamonchess.altervista.org/web_evaluate4.gif">
+<img src="https://gekomad.github.io/Cinnamon/img/web_evaluate4.gif">
 
 #### Version
 v.0.3
