@@ -4,7 +4,7 @@ chess-engine-eval-debugger
 <img src="https://gekomad.github.io/Cinnamon/img/web_evaluate4.gif">
 
 #### Version
-v.0.3
+v.0.4
 
 ## Run local server
 
