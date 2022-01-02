@@ -4,13 +4,10 @@ chess-engine-eval-debugger
 <img src="https://gekomad.github.io/Cinnamon/img/web_evaluate4.gif">
 
 #### Version
-v.0.4
+v.0.5
 
 ## Run local server
 
-`server_python2.py`
-
-or
 
 `server_python3.py`
 
@@ -20,7 +17,7 @@ or
 
 or
 
-[http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=c:\path\engine2.exe&proto2=uci&eval2=score&exe3=c:\path\engine3.exe&proto3=xboard&eval3=eval&exe4=c:\path\engine4.exe&proto4=uci&eval4=score](http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=c:\path\engine2.exe&proto2=uci&eval2=score&exe3=c:\path\engine3.exe&proto3=xboard&eval3=eval&exe4=c:\path\engine4.exe&proto4=uci&eval4=score)
+[http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&exe3=Crafty&proto3=xboard&eval3=score](http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&exe3=Crafty&proto3=xboard&eval3=score)
 
 
 ### Debbugging engine
