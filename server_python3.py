@@ -96,9 +96,9 @@ class Server(BaseHTTPRequestHandler):
 
         if exe == "Crafty" :
             if platform.system()=="Linux" :
-                exe = './engines/crafty-linux64'
+                exe = './engines/crafty_25.2_linux'
             elif platform.system()=="Windows" :
-                exe = './engines/crafty25.3.exe'
+                exe = './engines/crafty25.2.exe'
             elif platform.system()=="Darwin" :
                 exe = './engines/crafty_25.2_mac'
         elif exe == "Stockfish" :
@@ -142,7 +142,7 @@ def run(server_class=HTTPServer, handler_class=Server, port=8080):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
 
-    print("\nopen http://127.0.0.1:8080/\n")
+    print("\nopen http://127.0.0.1:8080/index.html?exe1=c:\path\your_engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&exe3=Crafty&proto3=xboard&eval3=score\n")
     'Starting httpd on port %d...' % port
     httpd.serve_forever()
 
