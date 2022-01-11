@@ -1,31 +1,32 @@
 
 chess-engine-eval-debugger
 ======
-<img src="https://gekomad.github.io/Cinnamon/img/web_evaluate4.gif">
+<img src="https://raw.githubusercontent.com/gekomad/chess-engine-eval-debugger/site/img/img.gif">
 
 #### Version
-v.0.5
+v.1.0
 
-## Run local server
+## Run local web server
 
 
-`server_python3.py`
+`server.py`
 
 ## Open web page
 
-[http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html)
+[http://127.0.0.1:8385](http://127.0.0.1:8385)
 
-or
+or with bookmarks
 
-[http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&exe3=Crafty&proto3=xboard&eval3=score](http://127.0.0.1:8080/index.html?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&exe3=Crafty&proto3=xboard&eval3=score)
+ht<span>tp</span>://127.0.0.1:8385/?exe1=c:\path\engine1.exe&proto1=uci&eval1=score&exe2=Stockfish&proto2=uci&eval2=eval&regex2=.*Total evaluation:.* (.*) \(.*&exe3=Crafty&proto3=xboard&eval3=score&regex3=.*total..........(.*).*
 
 
 ### Debbugging engine
 
-1. Set one or more engines
-2. Set eval command, example stockfish 8 uses **eval**, crafty uses **score**
-3. Select protocol (uci or xboard)
-4. Set pieces on chessboard and automatically the evaluate value will appear below.
+1. Set one or more engines.
+2. Set eval command, example stockfish uses **eval**, crafty uses **score**.
+3. Set pieces on chessboard and automatically the evaluate value will appear below.
+4. Can generate random positions.
+5. Passing a list of `fen string`, can generate a `csv file` with score.
 
 ### How it works
 
@@ -36,14 +37,6 @@ position fen <fen>
 quit
 ```
 
-and the stdout will be show in text area
-
-example for stockfish:
-```
-position fen rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR w KQkq - 0 1
-eval
-quit
-```
 these commands will be send to **XBOARD** engine
 
 ```
@@ -51,20 +44,15 @@ position fen <fen>
 <eval command>
 quit
 ```
+and the stdout will be show in text area
 
-example for crafty:
-```
-setboard rnbqkbnr/pppppppp/8/8/8/6P1/PPPPPP1P/RNBQKBNR w KQkq - 0 1
-score
-quit
-```
 
 ### Use your engine
 
-Engines (uci or xboard) have to manage the command `<eval command>` to print eval information
+Engines (uci or xboard) have to manage the command `<eval command>` to print information, Stockfish uses `eval`, Crafty uses `score`
 
 ### Requirements
-Python (2 or 3)
+Python 3
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use [Github Issues](https://github.com/gekomad/chess-engine-eval-debugger/issues).

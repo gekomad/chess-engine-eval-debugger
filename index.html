@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="css/site2.css"/>
     <link rel="stylesheet" href="css/chessboard.css"/>
     <style>
+         #fen_list {
+            resize: none;
+         }
          #writeArea1 {
          font-family: monospace;
          }
@@ -40,13 +43,13 @@
 </head>
 <body style="background-color:#aaa;" onload="init()">
 <div class="row">
-    <div class="column" style="background-color:#aaa;">
+    <div class="column" >
         <div class="row">
-            <div class="column" style="background-color:#777;">
+            <div class="column" style="background-color:#aaa;">
                 <div class="column" style="background-color:#aaa;">
                     <div id="board" style="width: 230px"></div>
                 </div>
-                <div class="column" style="padding-left:30px;padding-top:40px;background-color:#aaa;">
+                <div class="column" style="padding-left:30px;padding-top:40px">
                     <input type="checkbox" id="castle_K" checked>White castle kingside<br>
                     <input type="checkbox" id="castle_k" checked>Black castle kingside<br>
                     <input type="checkbox" id="castle_Q" checked>White castle queenside<br>
@@ -96,14 +99,11 @@
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
-                    <option
-                    " value="5">5</option>
-                    <option
-                    " value="6">6</option>
-                    <option
-                    " value="7">7</option>
-                    <option
-                    " value="8">8</option><</select>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <</select>
                 <br>
                 <img src="img/chesspieces/wikipedia/bQ.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -151,7 +151,9 @@
                 </select>
                 <br>
                 <br>
-                <input type="button" id="generateBtn" value="Generate random positions"/>
+                <input type="button" id="generateBtn" value="Random positions"/>
+                <input type="button" id="generateScriptBtn" value="Generate csv file script"/>
+                <input type="button" value="Clear" onclick='$("#fen_list").val("")'/>
 
                 <textarea id="fen_list" style="height: 180px;width: 100%; font-size: 10px;">
 =====> 5man.epd <=====
@@ -283,7 +285,6 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
 8/8/1p1r1k2/p1pPN1p1/P3KnP1/1P6/8/3R4 b - - 0 1
                     </textarea>
             </div>
-
         </div>
     </div>
 
@@ -299,12 +300,12 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
                 <option value="c:\path\engine1.exe">you engine</option>
             </datalist>
 
-            <label for="eval_command1">eval command:</label><input type="text" placeholder="eval" id="eval_command1"
+            <label for="eval_command1">eval command:</label><input type="text" placeholder="eval" size="4"
+                                                                   id="eval_command1" onchange="url_param()"
                                                                    value="eval">
-            <label for="protocol1">protocol:</label><select id="protocol1">
-            <option value="uci">uci</option>
-            <option value="xboard">xboard</option>
-        </select>
+            <label for="regex1">regex:</label><input type="text" placeholder="optional" id="regex1"
+                                                     onchange="url_param()">
+
         </div>
         <label for="engine2">Engine 2</label>
         <div class="row">
@@ -316,12 +317,14 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
                 <option value="c:\path\engine2.exe">you engine</option>
             </datalist>
 
-            <label for="eval_command2">eval command:</label><input type="text" placeholder="eval" id="eval_command2"
+            <label for="eval_command2">eval command:</label><input type="text" placeholder="eval" size="4"
+                                                                   id="eval_command2" onchange="url_param()"
                                                                    value="eval">
-            <label for="protocol2">protocol:</label><select id="protocol2">
-            <option value="uci">uci</option>
-            <option value="xboard">xboard</option>
-        </select>
+
+
+            <label for="regex2">regex:</label><input type="text" placeholder="optional" id="regex2"
+                                                     onchange="url_param()">
+
         </div>
         <label for="engine3">Engine 3</label>
         <div class="row">
@@ -333,12 +336,13 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
                 <option value="c:\path\engine3.exe">you engine</option>
             </datalist>
 
-            <label for="eval_command3">eval command:</label><input type="text" placeholder="eval" id="eval_command3"
+            <label for="eval_command3">eval command:</label><input type="text" placeholder="eval" size="4"
+                                                                   id="eval_command3" onchange="url_param()"
                                                                    value="eval">
-            <label for="protocol3">protocol:</label><select id="protocol3">
-            <option value="uci">uci</option>
-            <option value="xboard">xboard</option>
-        </select>
+
+            <label for="regex3">regex:</label><input type="text" placeholder="optional" id="regex3"
+                                                     onchange="url_param()">
+
         </div>
         <label for="engine4">Engine 4</label>
         <div class="row">
@@ -350,16 +354,18 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
                 <option value="c:\path\engine4.exe">you engine</option>
             </datalist>
 
-            <label for="eval_command4">eval command:</label><input type="text" placeholder="eval" id="eval_command4"
+            <label for="eval_command4">eval command:</label><input type="text" placeholder="eval" size="4"
+                                                                   id="eval_command4" onchange="url_param()"
                                                                    value="eval">
-            <label for="protocol4">protocol:</label><select id="protocol4">
-            <option value="uci">uci</option>
-            <option value="xboard">xboard</option>
-        </select>
+
+            <label for="regex4">regex:</label><input type="text" placeholder="optional" id="regex4"
+                                                     onchange="url_param()">
+
         </div>
+
     </div>
 </div>
-<div class="row" >
+<div class="row">
     <p>
     <div class="row">
         <div class="column" style="background-color:#aaa;">
@@ -369,7 +375,7 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
                       readonly>eng1 evaluation</textarea>
         </div>
         <div class="column" style="background-color:#aaa;">
-            <p>_</p>
+            <p>url params: <input type="text" id="url_params" size="80%" disabled="disabled"></p>
             <textarea id="writeArea2" rows="15" style="background-color:#88aac2;" cols="115%"
                       readonly>eng2 evaluation</textarea>
         </div>
@@ -390,300 +396,516 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/chessboard.js"></script>
 <script>
-
 function change_options_exe1() {
- if( $("#exe1").val() =="Crafty"){
-  $("#eval_command1").val("score");
-  $("#protocol1").val("xboard");
- }else
- if( $("#exe1").val() =="Stockfish"){
-  $("#eval_command1").val("eval");
-  $("#protocol1").val("uci");
- }
+    if ($("#exe1").val() == "Crafty") {
+        $("#eval_command1").val("score");
+
+        $("#regex1").val(".*total\.\.\.\.\.\.\.\.\.\.(.*).*");
+    } else
+    if ($("#exe1").val() == "Stockfish") {
+        $("#eval_command1").val("eval");
+        $("#regex1").val(".*Total evaluation:.* (.*) \\(.*");
+    }
+    url_param()
 }
 
 function change_options_exe2() {
- if( $("#exe2").val() =="Crafty"){
-  $("#eval_command2").val("score");
-  $("#protocol2").val("xboard");
- }else
- if( $("#exe2").val() =="Stockfish"){
-  $("#eval_command2").val("eval");
-  $("#protocol2").val("uci");
- }
+    if ($("#exe2").val() == "Crafty") {
+        $("#eval_command2").val("score");
+
+        $("#regex2").val(".*total\.\.\.\.\.\.\.\.\.\.(.*).*");
+    } else
+    if ($("#exe2").val() == "Stockfish") {
+        $("#eval_command2").val("eval");
+        $("#regex2").val(".*Total evaluation:.* (.*) \\(.*");
+    }
+    url_param()
 }
 
-    function change_options_exe3() {
-     if( $("#exe3").val() =="Crafty"){
-      $("#eval_command3").val("score");
-      $("#protocol3").val("xboard");
-     }else
-     if( $("#exe3").val() =="Stockfish"){
-      $("#eval_command3").val("eval");
-      $("#protocol3").val("uci");
-     }
+function change_options_exe3() {
+    if ($("#exe3").val() == "Crafty") {
+        $("#eval_command3").val("score");
+        $("#regex3").val(".*total\.\.\.\.\.\.\.\.\.\.(.*).*");
+    } else
+    if ($("#exe3").val() == "Stockfish") {
+        $("#eval_command3").val("eval");
+        $("#regex3").val(".*Total evaluation:.* (.*) \\(.*");
     }
+    url_param()
+}
 
-        function change_options_exe4() {
-     if( $("#exe4").val() =="Crafty"){
-      $("#eval_command4").val("score");
-      $("#protocol4").val("xboard");
-     }else
-     if( $("#exe4").val() =="Stockfish"){
-      $("#eval_command4").val("eval");
-      $("#protocol4").val("uci");
-     }
+function change_options_exe4() {
+    if ($("#exe4").val() == "Crafty") {
+        $("#eval_command4").val("score");
+        $("#regex4").val(".*total\.\.\.\.\.\.\.\.\.\.(.*).*");
+    } else
+    if ($("#exe4").val() == "Stockfish") {
+        $("#eval_command4").val("eval");
+        $("#regex4").val(".*Total evaluation:.* (.*) \\(.*");
     }
+    url_param()
+}
 
-        $("#fen_list").click(function () {
-            var t = $("#fen_list")[0];
-            let rowNumber = t.value.substr(0, t.selectionStart).split("\n").length;
-            if (t.value.length !== t.selectionStart) {
-              line=t.value.split("\n")[rowNumber-1];
-              $('#text_fen').val(line);
-              edit_fen();
+    function selectTextareaLine(tarea,lineNum) {
+
+        lineNum--; // array starts at 0
+        var lines = tarea.value.split("\n");
+
+        // calculate start/end
+        var startPos = 0, endPos = tarea.value.length;
+        for(var x = 0; x < lines.length; x++) {
+            if(x == lineNum) {
+                break;
+            }
+            startPos += (lines[x].length+1);
+
         }
-        });
-         $( "#black_to_move" ).click(function() {  onDrop();});
-         $( "#castle_K" ).click(function() {  onDrop();});
-         $( "#castle_Q" ).click(function() {  onDrop();});
-         $( "#castle_k" ).click(function() {  onDrop();});
-         $( "#castle_q" ).click(function() {  onDrop();});
-         function init() {
-            $('#exe1').val($.urlParam('exe1'))
-               $('#exe2').val($.urlParam('exe2'))
-               $('#exe3').val($.urlParam('exe3'))
-               $('#exe4').val($.urlParam('exe4'))
-               if($.urlParam('proto1')!=null)$('#protocol1').val($.urlParam('proto1'))
-               if($.urlParam('proto2')!=null)$('#protocol2').val($.urlParam('proto2'))
-               if($.urlParam('proto3')!=null)$('#protocol3').val($.urlParam('proto3'))
-               if($.urlParam('proto4')!=null)$('#protocol4').val($.urlParam('proto4'))
-               $('#eval_command1').val($.urlParam('eval1'))
-               $('#eval_command2').val($.urlParam('eval2'))
-               $('#eval_command3').val($.urlParam('eval3'))             
-               $('#eval_command4').val($.urlParam('eval4'))
-         }
-         
-         $.urlParam = function(name){
-          var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-          if (results==null) {
-             return null;
-          }
-          return decodeURI(results[1]) || 0;
-         }
-             
-            var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
-              
-               var side_to_move='w'
-               var castle=''
-               if($("#black_to_move").prop('checked')){
-                side_to_move='b'
-               }
-               if($("#castle_K").prop('checked')){
-                castle=castle+'K'
-               }
-               if($("#castle_Q").prop('checked')){
-                castle=castle+'Q'
-               }
-               if($("#castle_k").prop('checked')){
-                castle=castle+'k'
-               }
-               if($("#castle_q").prop('checked')){
-                castle=castle+'q'
-               }
-               if(castle==''){
-                castle='-'
-               }
-         
-         
-               if(newPos==null){
-                   fen_complete= board.fen() +" "+side_to_move+" "+castle +" - 0 1"
-              }else{
-                  fen_complete= ChessBoard.objToFen(newPos) +" "+side_to_move+" "+castle +" - 0 1"
-              }
 
-               $('#text_fen').val(fen_complete);
-               if($("#exe1").val()!="" && $("#eval_command1").val()!=""){
-                   $.ajax({
-                       type: 'POST',
-                       url: 'json.server.py',
-                       data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe1").val())+'","eval_command":"'+$("#eval_command1").val()+'","protocol":"'+$("#protocol1").val()+'"}',    
-                       contentType: "application/json",
-                       dataType: 'json',
-                       success: function(msg) {
-                               $('#writeArea1').val(msg.responseText);
-                               $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);   
-                               return data;
-                           },
-                   
-                       error: function(msg) {
-                               $('#writeArea1').val(msg.responseText);
-                               $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);   
-                           }
-                   }); 
-                }else {
-                     if($("#exe1").val()=="")$('#writeArea1').val("first engine not selected");else
-                     $('#writeArea1').val("first eval command not selected");
-               }
-               if($("#exe2").val()!="" && $("#eval_command2").val()!=""){
-               $.ajax({
-                   type: 'POST',
-                   url: 'json.server.py',
-                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe2").val())+'","eval_command":"'+$("#eval_command2").val()+'","protocol":"'+$("#protocol2").val()+'"}',    
-                   contentType: "application/json",
-                   dataType: 'json',
-                   success: function(msg) {
-                           $('#writeArea2').val(msg.responseText);
-                           $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);   
-                           return data;
-                       },
-               
-                   error: function(msg) {
-                           $('#writeArea2').val(msg.responseText);
-                           $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);   
-                       }
-               });
-               }else {
-                     if($("#exe2").val()=="")$('#writeArea2').val("second engine not selected");else
-                     $('#writeArea2').val("second eval command not selected");
-               }
-               
-               if($("#exe3").val()!="" && $("#eval_command3").val()!=""){
-               $.ajax({
-                   type: 'POST',
-                   url: 'json.server.py',
-                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe3").val())+'","eval_command":"'+$("#eval_command3").val()+'","protocol":"'+$("#protocol3").val()+'"}',    
-                   contentType: "application/json",
-                   dataType: 'json',
-                   success: function(msg) {
-                           $('#writeArea3').val(msg.responseText);
-                           $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);   
-                           return data;
-                       },
-               
-                   error: function(msg) {
-                           $('#writeArea3').val(msg.responseText);
-                           $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);   
-                       }
-               });
-               }else {
-                     if($("#exe3").val()=="")$('#writeArea3').val("third engine not selected");else
-                     $('#writeArea3').val("third eval command not selected");
-               }
-               if($("#exe4").val()!="" && $("#eval_command4").val()!=""){
-               $.ajax({
-                   type: 'POST',
-                   url: 'json.server.py',
-                   data: '{"fen":"'+fen_complete+'","exe":"'+encodeURI($("#exe4").val())+'","eval_command":"'+$("#eval_command4").val()+'","protocol":"'+$("#protocol4").val()+'"}',    
-                   contentType: "application/json",
-                   dataType: 'json',
-                   success: function(msg) {
-                           $('#writeArea4').val(msg.responseText);     
-                           $('#writeArea1').scrollTop($('#writeArea4')[0].scrollHeight);                        
-                           return data;
-                       },
-               
-                   error: function(msg) {
-                           $('#writeArea4').val(msg.responseText);
-                           $('#writeArea4').scrollTop($('#writeArea4')[0].scrollHeight);   
-                       }
-               });
-               }else {
-                     if($("#exe4").val()=="")$('#writeArea4').val("fourth engine not selected");else
-                     $('#writeArea4').val("fourth eval command not selected");
-               }
-               };
-               
-               
-               var cfg = {
-                 draggable: true,
-                 position: 'start',
-                 dropOffBoard: 'trash',
-                 onDrop: onDrop,
-                 sparePieces: true
-               };
-               var board = ChessBoard('board', cfg);
-                function edit_fen () {
-                 fen = $('#text_fen').val()
-                 board.position(fen);
-                 document.getElementById("castle_K").checked = false;
-                 document.getElementById("castle_k").checked = false;
-                 document.getElementById("castle_Q").checked = false;
-                 document.getElementById("castle_q").checked = false;
-                 if(fen.includes(' b '))document.getElementById("black_to_move").checked = true;
-                 castling=fen.split(' ')[2]
-                 if(castling.includes('k'))document.getElementById("castle_k").checked = true;
-                 if(castling.includes('K'))document.getElementById("castle_K").checked = true;
-                 if(castling.includes('q'))document.getElementById("castle_q").checked = true;
-                 if(castling.includes('Q'))document.getElementById("castle_Q").checked = true;
-         
-                 onDrop();
-              };
-              $('#text_fen').on('input', edit_fen);
-          
-               $('#startBtn').on('click', function() {
-                 document.getElementById("castle_K").checked = true;
-                 document.getElementById("castle_k").checked = true;
-                 document.getElementById("castle_Q").checked = true;
-                 document.getElementById("castle_q").checked = true;
-                 document.getElementById("black_to_move").checked = false;         
-                 board.start()
-                 onDrop();
-                 }
-             );
-               $('#clearBtn').on('click', function() {
-                 document.getElementById("castle_K").checked = false;
-                 document.getElementById("castle_k").checked = false;
-                 document.getElementById("castle_Q").checked = false;
-                 document.getElementById("castle_q").checked = false;
-                 board.clear()
-                 }
-             );
-             $('#generateBtn').on('click', function() {
-                $('#fen_list').val("generating...");
-                let puzzle = 'K';
+        var endPos = lines[lineNum].length+startPos;
 
-                for (let i = 0; i < parseInt(document.getElementById("wq_puzzle").value); i++) puzzle = puzzle + "Q";
-                for (let i = 0; i < parseInt(document.getElementById("wr_puzzle").value); i++) puzzle = puzzle + "R";
-                for (let i = 0; i < parseInt(document.getElementById("wb_puzzle").value); i++) puzzle = puzzle + "B";
-                for (let i = 0; i < parseInt(document.getElementById("wn_puzzle").value); i++) puzzle = puzzle + "N";
-                for (let i = 0; i < parseInt(document.getElementById("wp_puzzle").value); i++) puzzle = puzzle + "P";
-                puzzle = puzzle + "K";
-                for (let i = 0; i < parseInt(document.getElementById("bq_puzzle").value); i++) puzzle = puzzle + "Q";
-                for (let i = 0; i < parseInt(document.getElementById("br_puzzle").value); i++) puzzle = puzzle + "R";
-                for (let i = 0; i < parseInt(document.getElementById("bb_puzzle").value); i++) puzzle = puzzle + "B";
-                for (let i = 0; i < parseInt(document.getElementById("bn_puzzle").value); i++) puzzle = puzzle + "N";
-                for (let i = 0; i < parseInt(document.getElementById("bp_puzzle").value); i++) puzzle = puzzle + "P";
+        // do selection
+        // Chrome / Firefox
+
+        if(typeof(tarea.selectionStart) != "undefined") {
+            tarea.focus();
+            tarea.selectionStart = startPos;
+            tarea.selectionEnd = endPos;
+            return true;
+        }
+
+        // IE
+         if (document.selection && document.selection.createRange) {
+            tarea.focus();
+            tarea.select();
+            var range = document.selection.createRange();
+            range.collapse(true);
+            range.moveEnd("character", endPos);
+            range.moveStart("character", startPos);
+            range.select();
+            return true;
+        }
+
+        return false;
+    }
 
 
-                function myFunction(responseText) {
-                    let arr=responseText.split('\n').slice(0, 40).join("\n");
-                    $('#fen_list').val(arr);
+function fen_list_select(){
+    var t = $("#fen_list")[0];
+    let rowNumber = t.value.substr(0, t.selectionStart).split("\n").length;
+    if (t.value.length !== t.selectionStart) {
+        line = t.value.split("\n")[rowNumber -1];
+        $('#text_fen').val(line);
+
+
+        edit_fen()
+        selectTextareaLine(document.getElementById('fen_list'),rowNumber);
+    }
+};
+$("#fen_list").click(function() {
+   fen_list_select()
+});
+$("#fen_list").keyup(function() {
+    fen_list_select()
+});
+$("#black_to_move").click(function() {
+    onDrop();
+});
+$("#castle_K").click(function() {
+    onDrop();
+});
+$("#castle_Q").click(function() {
+    onDrop();
+});
+$("#castle_k").click(function() {
+    onDrop();
+});
+$("#castle_q").click(function() {
+    onDrop();
+});
+
+function init() {
+    $('#exe1').val($.urlParam('exe1'))
+    $('#exe2').val($.urlParam('exe2'))
+    $('#exe3').val($.urlParam('exe3'))
+    $('#exe4').val($.urlParam('exe4'))
+
+    $('#eval_command1').val($.urlParam('eval1'))
+    $('#eval_command2').val($.urlParam('eval2'))
+    $('#eval_command3').val($.urlParam('eval3'))
+    $('#eval_command4').val($.urlParam('eval4'))
+    $('#regex1').val($.urlParam('regex1'))
+    $('#regex2').val($.urlParam('regex2'))
+    $('#regex3').val($.urlParam('regex3'))
+    $('#regex4').val($.urlParam('regex4'))
+    url_param()
+}
+
+$.urlParam = function(name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null) {
+        return null;
+    }
+    return decodeURI(results[1]) || 0;
+}
+function isValidFen(fen){
+    if (!fen.includes("k"))return false;
+    if (!fen.includes("K"))return false;
+    if (!fen.includes("/"))return false;
+    return true;
+};
+
+function url_param(){
+    params="?"
+    ex1=$("#exe1").val()
+    ex2=$("#exe2").val()
+    ex3=$("#exe3").val()
+    ex4=$("#exe4").val()
+
+    if(ex1!=""){
+        e=$("#eval_command1").val()
+        if(e!=""){
+            r=$("#regex1").val()
+            params+="exe1="+ex1+"&eval1="+e
+            if(r!="")params+="&regex1="+r
+        }
+    }
+    if(ex2!=""){
+        e=$("#eval_command2").val()
+        if(e!=""){
+            r=$("#regex2").val()
+            params+="&exe2="+ex2+"&eval2="+e
+            if(r!="")params+="&regex2="+r
+        }
+    }
+    if(ex3!=""){
+        e=$("#eval_command3").val()
+        if(e!=""){
+            r=$("#regex3").val()
+            params+="&exe3="+ex3+"&eval3="+e
+            if(r!="")params+="&regex3="+r
+        }
+    }
+    if(ex4!=""){
+        e=$("#eval_command4").val()
+        if(e!=""){
+            r=$("#regex4").val()
+            params+="&exe4="+ex4+"&eval4="+e
+            if(r!="")params+="&regex4="+r
+        }
+    }
+    $('#url_params').val(params);
+}
+
+var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
+
+    $('#writeArea1').val("evaluating...");
+    $('#writeArea2').val("evaluating...");
+    $('#writeArea3').val("evaluating...");
+    $('#writeArea4').val("evaluating...");
+    var side_to_move = 'w'
+    var castle = ''
+    if ($("#black_to_move").prop('checked')) {
+        side_to_move = 'b'
+    }
+    if ($("#castle_K").prop('checked')) {
+        castle = castle + 'K'
+    }
+    if ($("#castle_Q").prop('checked')) {
+        castle = castle + 'Q'
+    }
+    if ($("#castle_k").prop('checked')) {
+        castle = castle + 'k'
+    }
+    if ($("#castle_q").prop('checked')) {
+        castle = castle + 'q'
+    }
+    if (castle == '') {
+        castle = '-'
+    }
+
+
+    if (newPos == null) {
+        fen_complete = board.fen() + " " + side_to_move + " " + castle + " - 0 1"
+    } else {
+        fen_complete = ChessBoard.objToFen(newPos) + " " + side_to_move + " " + castle + " - 0 1"
+    }
+
+    $('#text_fen').val(fen_complete);
+
+    function run1() {
+        if ($("#exe1").val() != "" && $("#eval_command1").val() != "") {
+            $.ajax({
+                type: 'POST',
+                url: 'json.server.py',
+                data: '{"fen":"' + fen_complete + '","exe":"' + encodeURI($("#exe1").val()) + '","eval_command":"' + $("#eval_command1").val() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(msg) {
+                    $('#writeArea1').val(msg.responseText);
+                    $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);
+                    //return data;
+                },
+
+                error: function(msg) {
+                    $('#writeArea1').val(msg.responseText);
+                    $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);
                 }
-                $.ajax({
-                       type: 'PUT',
-                       url: 'json.server.py',
-                       data: '{"puzzle": "'+puzzle+'"}',
-                       contentType: "application/json",
-                       dataType: 'json',
-                       success: function(msg) {
-                               myFunction(msg.responseText);
-                               return data;
-                           },
+            });
+        } else {
+            if ($("#exe1").val() == "") $('#writeArea1').val("first engine not selected");
+            else
+                $('#writeArea1').val("first eval command not selected");
+        }
+    }
 
-                       error: function(msg) {
-                                 myFunction(msg.responseText);
-                           }
-                   });
-                 });
+    function run2() {
+        if ($("#exe2").val() != "" && $("#eval_command2").val() != "") {
+            $.ajax({
+                type: 'POST',
+                url: 'json.server.py',
+                data: '{"fen":"' + fen_complete + '","exe":"' + encodeURI($("#exe2").val()) + '","eval_command":"' + $("#eval_command2").val() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(msg) {
+                    $('#writeArea2').val(msg.responseText);
+                    $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);
+                    //return data;
+                },
+
+                error: function(msg) {
+                    $('#writeArea2').val(msg.responseText);
+                    $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);
+                }
+            });
+        } else {
+            if ($("#exe2").val() == "") $('#writeArea2').val("second engine not selected");
+            else
+                $('#writeArea2').val("second eval command not selected");
+        }
+    }
+
+    function run3() {
+        if ($("#exe3").val() != "" && $("#eval_command3").val() != "") {
+            $.ajax({
+                type: 'POST',
+                url: 'json.server.py',
+                data: '{"fen":"' + fen_complete + '","exe":"' + encodeURI($("#exe3").val()) + '","eval_command":"' + $("#eval_command3").val() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(msg) {
+                    $('#writeArea3').val(msg.responseText);
+                    $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);
+                   // return data;
+                },
+
+                error: function(msg) {
+                    $('#writeArea3').val(msg.responseText);
+                    $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);
+                }
+            });
+        } else {
+            if ($("#exe3").val() == "") $('#writeArea3').val("third engine not selected");
+            else
+                $('#writeArea3').val("third eval command not selected");
+        }
+    }
+
+    function run4() {
+        if ($("#exe4").val() != "" && $("#eval_command4").val() != "") {
+            $.ajax({
+                type: 'POST',
+                url: 'json.server.py',
+                data: '{"fen":"' + fen_complete + '","exe":"' + encodeURI($("#exe4").val()) + '","eval_command":"' + $("#eval_command4").val() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(msg) {
+                    $('#writeArea4').val(msg.responseText);
+                    $('#writeArea1').scrollTop($('#writeArea4')[0].scrollHeight);
+                   // return data;
+                },
+
+                error: function(msg) {
+                    $('#writeArea4').val(msg.responseText);
+                    $('#writeArea4').scrollTop($('#writeArea4')[0].scrollHeight);
+                }
+            });
+        } else {
+            if ($("#exe4").val() == "") $('#writeArea4').val("fourth engine not selected");
+            else
+                $('#writeArea4').val("fourth eval command not selected");
+        }
+    }
+        
+    run1()
+    run2()
+    run3()
+    run4()
+};
 
 
+var cfg = {
+    draggable: true,
+    position: 'start',
+    dropOffBoard: 'trash',
+    onDrop: onDrop,
+    sparePieces: true
+};
+var board = ChessBoard('board', cfg);
+
+function edit_fen() {
+    fen = $('#text_fen').val()
+    pre=board.fen()
+    board.position(fen);
+    if (pre==board.fen()){
+        $('#writeArea1').val("malformed fen");
+        $('#writeArea2').val("malformed fen");
+        $('#writeArea3').val("malformed fen");
+        $('#writeArea4').val("malformed fen");
+        return
+    }
+    document.getElementById("castle_K").checked = false;
+    document.getElementById("castle_k").checked = false;
+    document.getElementById("castle_Q").checked = false;
+    document.getElementById("castle_q").checked = false;
+    if (fen.includes(' b ')) document.getElementById("black_to_move").checked = true;
+    castling = fen.split(' ')[2]
+    if (castling.includes('k')) document.getElementById("castle_k").checked = true;
+    if (castling.includes('K')) document.getElementById("castle_K").checked = true;
+    if (castling.includes('q')) document.getElementById("castle_q").checked = true;
+    if (castling.includes('Q')) document.getElementById("castle_Q").checked = true;
+    onDrop();
+};
+$('#text_fen').on('input', edit_fen);
+
+$('#startBtn').on('click', function() {
+    document.getElementById("castle_K").checked = true;
+    document.getElementById("castle_k").checked = true;
+    document.getElementById("castle_Q").checked = true;
+    document.getElementById("castle_q").checked = true;
+    document.getElementById("black_to_move").checked = false;
+    board.start()
+    onDrop();
+});
+$('#clearBtn').on('click', function() {
+    document.getElementById("castle_K").checked = false;
+    document.getElementById("castle_k").checked = false;
+    document.getElementById("castle_Q").checked = false;
+    document.getElementById("castle_q").checked = false;
+    board.clear()
+});
+$('#generateScriptBtn').on('click', function() {
+
+    if ($("#exe1").val() == "" && $("#exe2").val() == "" && $("#exe3").val() == "" && $("#exe4").val() == "") {
+        alert("Select at least one engine");
+        return;
+    }
+    e1 = encodeURIComponent($("#exe1").val())
+    e2 = encodeURIComponent($("#exe2").val())
+    e3 = encodeURIComponent($("#exe3").val())
+    e4 = encodeURIComponent($("#exe4").val())
+    exe = `"exe1": "${e1}" , "exe2": "${e2}" , "exe3": "${e3}" ,"exe4": "${e4}" `
+    eval_command = `"eval_command1": "${$("#eval_command1").val()}" ,"eval_command2": "${$("#eval_command2").val()}" , "eval_command3": "${$("#eval_command3").val()}" ,"eval_command4": "${$("#eval_command4").val()}" `
+
+    r1 = encodeURIComponent($("#regex1").val())
+    r2 = encodeURIComponent($("#regex2").val())
+    r3 = encodeURIComponent($("#regex3").val())
+    r4 = encodeURIComponent($("#regex4").val())
+    regex = `"regex1": "${r1}" , "regex2": "${r2}" , "regex3": "${r3}" ,"regex4": "${r4}" `
+
+    if ($("#exe1").val() != "" && r1 === "") {
+        alert("regex 1 is empty");
+        return;
+    }
+    if ($("#exe1").val() != "" && $("#eval_command1").val() === "") {
+        alert("eval command 1 is empty");
+        return;
+    }
+    if ($("#exe2").val() != "" && r2 === "") {
+        alert("regex 2 is empty");
+        return;
+    }
+    if ($("#exe2").val() != "" && $("#eval_command2").val() === "") {
+        alert("eval command 2 is empty");
+        return;
+    }
+    if ($("#exe3").val() != "" && r3 === "") {
+        alert("regex 3 is empty");
+        return;
+    }
+    if ($("#exe3").val() != "" && $("#eval_command3").val() === "") {
+        alert("eval command 3 is empty");
+        return;
+    }
+    if ($("#exe4").val() != "" && r4 === "") {
+        alert("regex 4 is empty");
+        return;
+    }
+    if ($("#exe4").val() != "" && $("#eval_command4").val() === "") {
+        alert("eval command 4 is empty");
+        return;
+    }
+    if ($('#fen_list').val() === "") {
+        alert("fen list is empty");
+        return;
+    }
+    fens = encodeURIComponent($("#fen_list").val())
+    fen_list = `"fen_list":"${fens}"`
+    payload = `{ ${exe},${eval_command},${regex},${fen_list}}`
+    //alert(payload)
+    $.ajax({
+        type: 'PATCH',
+        url: 'json.server.py',
+        data: payload,
+        contentType: "application/json",
+        success: function(response) {
+            window.location = "generate_csv.zip";
+            alert('unzip file and run generate_csv.py')
+        },
+
+        error: function(response) {
+            alert('error')
+        }
+    });
+});
+
+$('#generateBtn').on('click', function() {
+    $('#fen_list').val("generating...");
+    let puzzle = 'K';
+
+    for (let i = 0; i < parseInt(document.getElementById("wq_puzzle").value); i++) puzzle = puzzle + "Q";
+    for (let i = 0; i < parseInt(document.getElementById("wr_puzzle").value); i++) puzzle = puzzle + "R";
+    for (let i = 0; i < parseInt(document.getElementById("wb_puzzle").value); i++) puzzle = puzzle + "B";
+    for (let i = 0; i < parseInt(document.getElementById("wn_puzzle").value); i++) puzzle = puzzle + "N";
+    for (let i = 0; i < parseInt(document.getElementById("wp_puzzle").value); i++) puzzle = puzzle + "P";
+    puzzle = puzzle + "K";
+    for (let i = 0; i < parseInt(document.getElementById("bq_puzzle").value); i++) puzzle = puzzle + "Q";
+    for (let i = 0; i < parseInt(document.getElementById("br_puzzle").value); i++) puzzle = puzzle + "R";
+    for (let i = 0; i < parseInt(document.getElementById("bb_puzzle").value); i++) puzzle = puzzle + "B";
+    for (let i = 0; i < parseInt(document.getElementById("bn_puzzle").value); i++) puzzle = puzzle + "N";
+    for (let i = 0; i < parseInt(document.getElementById("bp_puzzle").value); i++) puzzle = puzzle + "P";
 
 
+    function fillFenList(responseText) {
+        let arr = responseText.split('\n').slice(0, 40).join("\n");
+        $('#fen_list').val(arr);
+    }
+    $.ajax({
+        type: 'PUT',
+        url: 'json.server.py',
+        data: '{"puzzle": "' + puzzle + '"}',
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(msg) {
 
+            fillFenList(msg.responseText);
+            return data;
+        },
 
-
-
+        error: function(msg) {
+            fillFenList(msg.responseText);
+        }
+    });
+});
 
 
 </script>

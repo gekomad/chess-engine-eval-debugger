@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+
+import subprocess
+from subprocess import Popen
+import os
+import re
+import sys
+from threading import Thread
+import itertools
+import math
+
+def get_engine_name(engine):
+    input = bytes("uci\nquit\n", "utf-8")
+
+    outfile = Popen([engine], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    out, err = outfile.communicate(input=input)
+    res = out.decode()
+
+    try:
+        return re.compile(".*id name (.*).*").search(res).group(1).strip()
+    except:
+        return os.path.basename(engine)
+    return res
+
+
+def get_engine_output(exe, set_board, fen, eval_command):
+    input = bytes(
+        "ponder off" + '\n' + "log off" + '\n' + "setoption name ponder value false" + '\n' + set_board + ' ' + fen + '\n' + eval_command + '\n' + "quit" + '\n',
+        "utf-8")
+    outfile = Popen([exe], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = outfile.communicate(input)
+    res = out.decode()
+    res2 = ""
+    for line in res.splitlines():
+        if "White(1): " != line and "Black(1): " != line and "Unknown command" not in line and "Illegal move" not in line and "unable to open book file" not in line and "book is disabled" not in line and "pondering disabled" not in line and "machine has" not in line:
+            res2 += f"{line}\n"
+    return res2
+
+
+# def error(a, b):
+#     factor=2
+#     if a>0 and b<0 or a<0 and b>0 :
+#         factor=4
+#     x=pow(float(a)*100 - float(b)*100, factor)
+#     return "{:.4f}".format(math.sqrt(x))
+
+def error(a, b):
+    return "{:.4f}".format(math.sqrt(pow(float(a)*100 - float(b)*100, 2)))
+
+def clean(a):
+    while ",," in a:
+        a = a.replace(",,", ",")
+    return a
+
+
+def go(f):
+    fen_file = open(f, "r")
+    csv_file_name = f"{f}.csv"
+    csv_file = open(csv_file_name, 'w+')
+
+    count = 0
+    engine1 = $ENGINE1$
+    engine2 = $ENGINE2$
+    engine3 = $ENGINE3$
+    engine4 = $ENGINE4$
+    engine1_score = ""
+    engine2_score = ""
+    engine3_score = ""
+    engine4_score = ""
+    error_engine1_engine2 = ""
+    error_engine1_engine3 = ""
+    error_engine1_engine4 = ""
+    error_engine2_engine3 = ""
+    error_engine2_engine4 = ""
+    error_engine3_engine4 = ""
+    o = " fen"
+    engine1_name = ""
+    engine2_name = ""
+    engine3_name = ""
+    engine4_name = ""
+    if engine1 == True:
+        engine1_name = get_engine_name('$EXE1$')
+        o += f",{engine1_name}_score"
+        rg1 = re.compile("$REGEX1$")
+    if engine2 == True:
+        engine2_name = get_engine_name('$EXE2$')
+        o += f",{engine2_name}_score"
+        rg2 = re.compile("$REGEX2$")
+    if engine3 == True:
+        engine3_name = get_engine_name('$EXE3$')
+        o += f",{engine3_name}_score"
+        rg3 = re.compile("$REGEX3$")
+    if engine4 == True:
+        engine4_name = get_engine_name('$EXE4$')
+        o += f",{engine4_name}_score"
+        rg4 = re.compile("$REGEX4$")
+
+    if engine1 == True and engine2 == True:
+        o += f",ERROR_{engine1_name}_{engine2_name}"
+    if engine1 == True and engine3 == True:
+        o += f",ERROR_{engine1_name}_{engine3_name}"
+    if engine1 == True and engine4 == True:
+        o += f",ERROR_{engine1_name}_{engine4_name}"
+    if engine2 == True and engine3 == True:
+        o += f",ERROR_{engine2_name}_{engine3_name}"
+    if engine2 == True and engine4 == True:
+        o += f",ERROR_{engine2_name}_{engine4_name}"
+    if engine3 == True and engine4 == True:
+        o += f",ERROR_{engine3_name}_{engine4_name}"
+    csv_file.write(f"{clean(o)}\n")
+    print(f"output in {csv_file_name}...")
+    for a in fen_file:
+        count = count + 1
+        fen = a.strip().replace('"', '').replace(',', '')
+        if fen.count('/') != 7 or "k" not in fen or "K" not in fen:
+            print("\nskip  " + fen)
+            continue
+        try:
+
+            if engine1 == True:
+                res = get_engine_output("$EXE1$", "$POSITION1$", fen, "$SCORE1$")
+                a = rg1.search(res)
+                if a is None:
+                    print("\nError engine 1: regexp \"$REGEX1$\" doesn't match eval score in [" + res[:40].replace('\n',
+                                                                                                                   '') + "...]")
+                    break
+                engine1_score = float(a.group(1).strip())
+
+            if engine2 == True:
+                res = get_engine_output("$EXE2$", "$POSITION2$", fen, "$SCORE2$")
+                a = rg2.search(res)
+                if a is None:
+                    print("\nError engine 2: regexp \"$REGEX2$\" doesn't match eval score in [" + res[:40].replace('\n',
+                                                                                                                   '') + "...]")
+                    break
+                engine2_score = float(a.group(1).strip())
+
+            if engine3 == True:
+                res = get_engine_output("$EXE3$", "$POSITION3$", fen, "$SCORE3$")
+                a = rg3.search(res)
+                if a is None:
+                    print("\nError engine 3: regexp \"$REGEX3$\" doesn't match eval score in [" + res[:40].replace('\n',
+                                                                                                                   '') + "...]")
+                    break
+                engine3_score = float(a.group(1).strip())
+
+            if engine4 == True:
+                res = get_engine_output("$EXE4$", "$POSITION4$", fen, "$SCORE4$")
+                a = rg4.search(res)
+                if a is None:
+                    print("\nError engine 4: regexp \"$REGEX4$\" doesn't match eval score in [" + res[:40].replace('\n',
+                                                                                                                   '') + "...]")
+                    break
+                engine4_score = float(a.group(1).strip())
+
+            if engine1 == True:
+                if engine2 == True:
+                    error_engine1_engine2 = error(engine1_score, engine2_score)
+                if engine3 == True:
+                    error_engine1_engine3 = error(engine1_score, engine3_score)
+                if engine4 == True:
+                    error_engine1_engine4 = error(engine1_score, engine4_score)
+            if engine2 == True:
+                if engine3 == True:
+                    error_engine2_engine3 = error(engine2_score, engine3_score)
+                if engine4 == True:
+                    error_engine2_engine4 = error(engine2_score, engine4_score)
+            if engine3 == True and engine4 == True:
+                error_engine3_engine4 = error(engine3_score, engine4_score)
+
+            out = "{},{},{},{},{},{},{},{},{},{},{}".format(fen, engine1_score, engine2_score, engine3_score,
+                                                            engine4_score, error_engine1_engine2, error_engine1_engine3,
+                                                            error_engine1_engine4, error_engine2_engine3,
+                                                            error_engine2_engine4, error_engine3_engine4)
+            out = clean(out)
+            print(out)
+            print(f"{count}..", end="")
+            csv_file.write(f"{out}\n")
+            if count % 10 == 0:
+                csv_file.flush()
+        except KeyboardInterrupt:
+            break
+        except:
+            print("\nskip  " + fen)
+            continue
+    csv_file.close()
+
+
+def slicefile(filename, start, end):
+    s = int(start)
+    e = int(end)
+
+    lines = open(filename)
+    return itertools.islice(lines, s, e)
+
+
+def count_lines(file_name):
+    return sum(1 for line in open(file_name))
+
+
+if __name__ == "__main__":
+    print("\nuse generate_csv.py {n_thread} {fen_file}\n")
+    n_thread = 1
+    file_in = "fen.epd"
+
+    try:
+        n_thread = int(sys.argv[1])
+    except:
+        pass
+
+    try:
+        file_in = sys.argv[2]
+    except:
+        pass
+
+    if n_thread == 1:
+        print(f"n thread: {n_thread}\nfen file: {file_in}")
+        go(file_in)
+    else:
+        if n_thread > 8:
+            n_thread = 8
+        if n_thread < 0:
+            n_thread = 1
+        print(f"n thread: {n_thread}\nfen file: {file_in}")
+        n_lines = count_lines(file_in)
+        n_chunk = n_lines / n_thread
+        print(f"split {file_in} in {n_thread} files")
+        start = 0
+        threads = []
+        for x in range(n_thread):
+            fout = f"_fen.epd_{x}"
+            out = open(fout, "w")
+            for line in slicefile(file_in, start, start + n_chunk):
+                out.write(line)
+            out.close()
+            start += n_chunk
+            t = Thread(target=go, args=(fout,))
+            threads.append(t)
+            t.start()
+
+        for x in threads:
+            x.join()
