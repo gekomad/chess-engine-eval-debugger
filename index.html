@@ -755,18 +755,12 @@ function edit_fen() {
     pre=board.fen()
     board.position(fen);
 
-    if (pre == board.fen()){
-        $('#writeArea1').val("malformed fen");
-        $('#writeArea2').val("malformed fen");
-        $('#writeArea3').val("malformed fen");
-        $('#writeArea4').val("malformed fen");
-        return
-    }
     document.getElementById("castle_K").checked = false;
     document.getElementById("castle_k").checked = false;
     document.getElementById("castle_Q").checked = false;
     document.getElementById("castle_q").checked = false;
-    if (fen.includes(' b ')) document.getElementById("black_to_move").checked = true;
+    if (fen.includes(' b ')) document.getElementById("black_to_move").checked = true;else
+    if (fen.includes(' w ')) document.getElementById("black_to_move").checked = false;
 
     castling = fen.split(' ')[2]
     if(castling != null){
