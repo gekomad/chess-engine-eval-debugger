@@ -369,7 +369,7 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
     <p>
     <div class="row">
         <div class="column" style="background-color:#aaa;">
-            <p><input type="text" style=" border: none;" title="paste fen" size="100%" id="text_fen"
+            <p><input type="text" style=" border: none;" title="paste fen" size="100%" id="text_fen" oninput="edit_fen()"
                       value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
             <textarea id="writeArea1" rows="15" style="background-color:#88aac2;" cols="115%"
                       readonly>eng1 evaluation</textarea>
@@ -495,8 +495,6 @@ function fen_list_select(){
     if (t.value.length !== t.selectionStart) {
         line = t.value.split("\n")[rowNumber -1];
         $('#text_fen').val(line);
-
-
         edit_fen()
         selectTextareaLine(document.getElementById('fen_list'),rowNumber);
     }
@@ -538,6 +536,7 @@ function init() {
     $('#regex3').val($.urlParam('regex3'))
     $('#regex4').val($.urlParam('regex4'))
     url_param()
+    onDrop()
 }
 
 $.urlParam = function(name) {
@@ -622,7 +621,6 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
     if (castle == '') {
         castle = '-'
     }
-
 
     if (newPos == null) {
         fen_complete = board.fen() + " " + side_to_move + " " + castle + " - 0 1"
@@ -735,7 +733,7 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
                 $('#writeArea4').val("fourth eval command not selected");
         }
     }
-        
+
     run1()
     run2()
     run3()
@@ -756,7 +754,8 @@ function edit_fen() {
     fen = $('#text_fen').val()
     pre=board.fen()
     board.position(fen);
-    if (pre==board.fen()){
+
+    if (pre == board.fen()){
         $('#writeArea1').val("malformed fen");
         $('#writeArea2').val("malformed fen");
         $('#writeArea3').val("malformed fen");
@@ -768,14 +767,16 @@ function edit_fen() {
     document.getElementById("castle_Q").checked = false;
     document.getElementById("castle_q").checked = false;
     if (fen.includes(' b ')) document.getElementById("black_to_move").checked = true;
+
     castling = fen.split(' ')[2]
-    if (castling.includes('k')) document.getElementById("castle_k").checked = true;
-    if (castling.includes('K')) document.getElementById("castle_K").checked = true;
-    if (castling.includes('q')) document.getElementById("castle_q").checked = true;
-    if (castling.includes('Q')) document.getElementById("castle_Q").checked = true;
+    if(castling != null){
+        if (castling.includes('k')) document.getElementById("castle_k").checked = true;
+        if (castling.includes('K')) document.getElementById("castle_K").checked = true;
+        if (castling.includes('q')) document.getElementById("castle_q").checked = true;
+        if (castling.includes('Q')) document.getElementById("castle_Q").checked = true;
+    }
     onDrop();
 };
-$('#text_fen').on('input', edit_fen);
 
 $('#startBtn').on('click', function() {
     document.getElementById("castle_K").checked = true;
