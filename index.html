@@ -65,15 +65,13 @@
                 <select id="wq_puzzle">
                     <option value="0">0</option>
                     <option value="1">1</option>
-                    <option value="2">2</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/wR.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
                 <select id="wr_puzzle">
                     <option value="0">0</option>
                     <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option value="2">2</option>          
                 </select>
                 <img src="img/chesspieces/wikipedia/wB.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -81,7 +79,6 @@
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/wN.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -89,7 +86,6 @@
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/wP.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -110,7 +106,6 @@
                 <select id="bq_puzzle">
                     <option value="0">0</option>
                     <option value="1">1</option>
-                    <option value="2">2</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/bR.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -118,7 +113,6 @@
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/bB.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -126,7 +120,6 @@
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/bN.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -134,7 +127,6 @@
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
                 <img src="img/chesspieces/wikipedia/bP.png" class="piece-417db" data-piece="wB"
                      style="width: 28px;height: 28px;">
@@ -640,8 +632,7 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
                 dataType: 'json',
                 success: function(msg) {
                     $('#writeArea1').val(msg.responseText);
-                    $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);
-                    //return data;
+                    $('#writeArea1').scrollTop($('#writeArea1')[0].scrollHeight);                  
                 },
 
                 error: function(msg) {
@@ -666,8 +657,7 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
                 dataType: 'json',
                 success: function(msg) {
                     $('#writeArea2').val(msg.responseText);
-                    $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);
-                    //return data;
+                    $('#writeArea2').scrollTop($('#writeArea2')[0].scrollHeight);                
                 },
 
                 error: function(msg) {
@@ -692,8 +682,7 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
                 dataType: 'json',
                 success: function(msg) {
                     $('#writeArea3').val(msg.responseText);
-                    $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);
-                   // return data;
+                    $('#writeArea3').scrollTop($('#writeArea3')[0].scrollHeight);                  
                 },
 
                 error: function(msg) {
@@ -718,8 +707,7 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
                 dataType: 'json',
                 success: function(msg) {
                     $('#writeArea4').val(msg.responseText);
-                    $('#writeArea1').scrollTop($('#writeArea4')[0].scrollHeight);
-                   // return data;
+                    $('#writeArea1').scrollTop($('#writeArea4')[0].scrollHeight);                 
                 },
 
                 error: function(msg) {
@@ -786,7 +774,8 @@ $('#clearBtn').on('click', function() {
     document.getElementById("castle_k").checked = false;
     document.getElementById("castle_Q").checked = false;
     document.getElementById("castle_q").checked = false;
-    board.clear()
+    board.position('4k3/8/8/8/8/8/8/4K3 w - - 0 1')
+   // board.clear()
 });
 $('#generateScriptBtn').on('click', function() {
 
