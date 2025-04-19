@@ -1,0 +1,15 @@
+.metals/
+project/metals.sbt
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+.attach_pid*
+.pid
+*.sc
+.bsp/
+*.semanticdb

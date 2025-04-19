@@ -42,10 +42,13 @@
     </style>
 </head>
 <body style="background-color:#aaa;" onload="init()">
-<div class="row">
+
+
     <div class="column" >
         <div class="row">
+
             <div class="column" style="background-color:#aaa;">
+
                 <div class="column" style="background-color:#aaa;">
                     <div id="board" style="width: 230px"></div>
                 </div>
@@ -54,7 +57,7 @@
                     <input type="checkbox" id="castle_k" checked>Black castle kingside<br>
                     <input type="checkbox" id="castle_Q" checked>White castle queenside<br>
                     <input type="checkbox" id="castle_q" checked>Black castle queenside<br>
-                    <input type="checkbox" id="black_to_move">Black to move<br>
+                    <input type="checkbox" id="black_to_move">Black to move.<br>
                     <input type="button" id="startBtn" value="Init"/>
                     <input type="button" id="clearBtn" value="Clear"/>
                 </div>
@@ -279,7 +282,11 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
             </div>
         </div>
     </div>
-
+<div class="row">  <a href="https://github.com/gekomad/chess-engine-eval-debugger" target="_blank" style="text-decoration: none; font-size: 24px;">
+        <img src="https://cdn-icons-png.flaticon.com/256/25/25231.png" 
+             alt="GitHub" 
+             style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
     <div class="column" style="background-color:#bbb;">
         <h2>Engines</h2>
         <label>Engine 1</label>
@@ -356,15 +363,19 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
         </div>
 
     </div>
+
 </div>
 <div class="row">
     <p>
     <div class="row">
         <div class="column" style="background-color:#aaa;">
-            <p><input type="text" style=" border: none;" title="paste fen" size="100%" id="text_fen" oninput="edit_fen()"
-                      value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
-            <textarea id="writeArea1" rows="15" style="background-color:#88aac2;" cols="115%"
-                      readonly>eng1 evaluation</textarea>
+
+            <p>FEN: <input type="text" style=" border: none;" title="paste fen" size="100%" id="text_fen" oninput="edit_fen()"  onpaste="clear_pv()" value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></p>
+            <p>PV  : <input type="text" id="text_pv" style=" border: none;" placeholder="paste PV and use right key to move (ex. d2d4 d7d6)" size="95%"  oninput="edit_text_pv()"></pv>
+
+            <button id="nextButton"onclick="go_next_pv()" >Next</button>
+            <strong id="current_pv"></strong> 
+            <textarea id="writeArea1" rows="15" style="background-color:#88aac2;" cols="115%" readonly>eng1 evaluation</textarea>
         </div>
         <div class="column" style="background-color:#aaa;">
             <p>url params: <input type="text" id="url_params" size="80%" disabled="disabled"></p>
@@ -388,6 +399,10 @@ r1b1kb1r/3q1ppp/pBp1pn2/8/Np3P2/5B2/PPP3PP/R2Q1RK1 w kq -
 <script src="js/jquery-3.6.0.min.js"></script>
 <script src="js/chessboard.js"></script>
 <script>
+function clear_pv(){
+    $('#text_pv').val('');
+    current_pv.textContent = ''; 
+}
 function change_options_exe1() {
     if ($("#exe1").val() == "Crafty") {
         $("#eval_command1").val("score");
@@ -736,13 +751,16 @@ var cfg = {
     onDrop: onDrop,
     sparePieces: true
 };
+ 
+
 var board = ChessBoard('board', cfg);
+var old_fen=$('#text_fen').val().trim();
 
 function edit_fen() {
-    fen = $('#text_fen').val()
+    fen = $('#text_fen').val().trim();
+    old_fen=fen; 
     pre=board.fen()
     board.position(fen);
-
     document.getElementById("castle_K").checked = false;
     document.getElementById("castle_k").checked = false;
     document.getElementById("castle_Q").checked = false;
@@ -890,8 +908,53 @@ $('#generateBtn').on('click', function() {
         }
     });
 });
+ 
+    let currentIndex = -1;
+    var substring = [];
+    function edit_text_pv() {
+        currentIndex = -1;
+        substrings = text_pv.value.trim().split(" ");
+    }
+    const text_pv = document.getElementById('text_pv');
+    const output = document.getElementById('output');
+    function go_next_pv(){
+            if(currentIndex==substrings.length-1){
+                $('#text_fen').val(old_fen);
+                edit_fen() ;
+                currentIndex = -1;  
+                current_pv.textContent ='';
+                return;
+            }
+ 
+            currentIndex = (currentIndex + 1) % substrings.length;  
+            move_pv(currentIndex);
+    }    
+    text_pv.addEventListener('keydown', (event) => {
+        if (event.key === "ArrowRight") {
+            go_next_pv();
+        }
+        });
 
+    function move_pv(index) {     
+        const move1 = substrings[index];
+        const start = text_pv.value.indexOf(move1);
+        const end = start + move1.length;
+        text_pv.setSelectionRange(start, end); 
+        current_pv.textContent = move1; 
+        const from=move1.substring(0,2);
+	    const to=move1.substring(2,4);
+ 	    board.move(from+"-"+to);   
+        if(move1.length==5){ 
+            var currentPosition = board.position();
+            const color = currentPosition[to].substring(0,1); 
+            const promotion=move1.substring(4,5).toUpperCase();
+            var currentPosition = board.position();
+            currentPosition[to] = color+promotion;
+            board.position(currentPosition);
+        }
 
-</script>
+        onDrop();        
+    }
+  </script>
 </body>
 </html>
