@@ -4,7 +4,7 @@ chess-engine-eval-debugger
 <img src="https://raw.githubusercontent.com/gekomad/chess-engine-eval-debugger/site/img/img.gif">
 
 #### Version
-v.1.0
+v.1.1
 
 ## Run local web server
 
